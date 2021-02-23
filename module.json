@@ -1,0 +1,20 @@
+{
+	"name": "{{name}}",
+	"title": "{{title}}",
+	"description": "{{description}}",
+	"version": "{{version}}",
+	"author": "<<your name here>>",
+	"minimumCoreVersion": "0.7.9",
+	"compatibleCoreVersion": "0.7.9",
+	"esmodules": "{{sources}}",
+	"styles": "{{css}}",
+	"languages": [
+		{ "lang": "en", "name": "English", "path": "lang/en.json" }
+	],
+	"url":		"https://domain.com/my/project/{{name}}",
+	"license":	"https://domain.com/my/project/{{name}}/LICENSE",
+	"manifest":	"https://domain.com/my/project/{{name}}/bundle/module.json",
+	"download":	"https://domain.com/my/project/{{name}}/bundle/{{name}}.zip",
+	"readme":	"https://domain.com/my/project/{{name}}/README.md",
+	"changelog":"https://domain.com/my/project/{{name}}/CHANGELOG.md"
+}
