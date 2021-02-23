@@ -96,7 +96,7 @@ The module manifest does not contain too much that needs to be updated. There ar
 
 The `module.json` file contains sections that will need to be updated. You can see a commented version below:
 
-```json
+```jsonc
 /* file: module.json */
 {
 	/* module package name, pulled from the package.json */
@@ -141,7 +141,7 @@ The `module.json` file contains sections that will need to be updated. You can s
 
 The NPM Package file is used by NPM to handle the project dependencies and to run the Gulp builder. There are a couple of things that need to be updated in this file for your new module.
 
-```json
+```jsonc
 {
     /* Update this to your unique package name (no spaces!) */
 	"name": "module-package-name",
