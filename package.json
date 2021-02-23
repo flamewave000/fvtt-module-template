@@ -14,7 +14,6 @@
 		"release": "npx gulp zip"
 	},
 	"devDependencies": {
-		"@types/node": "^14.14.21",
 		"del": "^6.0.0",
 		"foundry-vtt-types": "github:kmoschcau/foundry-vtt-types#foundry-0.7.9",
 		"gulp": "^4.0.2",
