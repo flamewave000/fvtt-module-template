@@ -1,3 +1,4 @@
 {
-	"MODULE_PACKAGE_NAME.MyFancyString": "My string that is shown to the user"
+	"MODULE_PACKAGE_NAME.ExampleDialog_Title": "Example Dialog",
+	"MODULE_PACKAGE_NAME.ExampleDialog_Content": "<p>This is just an example, I don't care if you say yes or no!</p>"
 }

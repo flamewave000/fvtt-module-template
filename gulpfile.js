@@ -7,6 +7,7 @@ const zip = require('gulp-zip');
 const rename = require('gulp-rename');
 const minify = require('gulp-minify');
 const tabify = require('gulp-tabify');
+const stringify = require('json-stringify-pretty-compact');
 
 const GLOB = '**/*';
 const DIST = 'dist/';
@@ -53,7 +54,7 @@ exports.step_buildSourceMin = buildSource(false, true);
  */
 function buildManifest(output = null) {
 	const files = []; // Collector for all the file paths
-	return (cb) => gulp.src(SOURCE + GLOB) // collect the source files
+	return (cb) => gulp.src(PACKAGE.main) // collect the source files
 		.pipe(rename({ extname: '.js' })) // rename their extensions to `.js`
 		.pipe(gulp.src(CSS + GLOB)) // grab all the CSS files
 		.on('data', file => files.push(file.path.replace(file.base, file.base.replace(file.cwd + '/', '')))) // Collect all the file paths
@@ -68,8 +69,8 @@ function buildManifest(output = null) {
 					.replaceAll('{{title}}', PACKAGE.title)
 					.replaceAll('{{version}}', PACKAGE.version)
 					.replaceAll('{{description}}', PACKAGE.description)
-					.replace('"{{sources}}"', JSON.stringify(js, null, '\t').replaceAll('\n', '\n\t'))
-					.replace('"{{css}}"', JSON.stringify(css, null, '\t').replaceAll('\n', '\n\t'));
+					.replace('"{{sources}}"', stringify(js, null, '\t').replaceAll('\n', '\n\t'))
+					.replace('"{{css}}"', stringify(css, null, '\t').replaceAll('\n', '\n\t'));
 				fs.writeFile((output || DIST) + 'module.json', module, cb); // save the module to the distribution directory
 			});
 		});
@@ -100,15 +101,7 @@ function compressDistribution() {
 		, pdel(DIST + PACKAGE.name)
 	);
 }
-exports.step_buildManifest = compressDistribution();
-
-/**
- * Outputs the current distribution folder to the Development Environment.
- */
-function outputDistToDevEnvironment() {
-	return gulp.src(DIST + GLOB).pipe(gulp.dest(PACKAGE.devDir + PACKAGE.name));
-}
-exports.step_outputDistToDevEnvironment = outputDistToDevEnvironment;
+exports.step_compressDistribution = compressDistribution();
 
 /**
  * Simple clean command
@@ -142,7 +135,6 @@ exports.dev = gulp.series(
 		, outputStylesCSS(DEV_DIST())
 		, outputMetaFiles(DEV_DIST())
 	)
-	, outputDistToDevEnvironment
 );
 /**
  * Performs a default build and then zips the result into a bundle
@@ -166,7 +158,7 @@ exports.zip = gulp.series(
 exports.watch = function () {
 	exports.default();
 	gulp.watch(SOURCE + GLOB, gulp.series(pdel(DIST + SOURCE), buildSource(true, false)));
-	gulp.watch([SOURCE + GLOB, CSS + GLOB, 'module.json', 'package.json'], buildManifest());
+	gulp.watch([CSS + GLOB, 'module.json', 'package.json'], buildManifest());
 	gulp.watch(LANG + GLOB, gulp.series(pdel(DIST + LANG), outputLanguages()));
 	gulp.watch(TEMPLATES + GLOB, gulp.series(pdel(DIST + TEMPLATES), outputTemplates()));
 	gulp.watch(CSS + GLOB, gulp.series(pdel(DIST + CSS), outputStylesCSS()));
@@ -179,7 +171,7 @@ exports.devWatch = function () {
 	const devDist = DEV_DIST();
 	exports.dev();
 	gulp.watch(SOURCE + GLOB, gulp.series(plog('deleting: ' + devDist + SOURCE + GLOB), pdel(devDist + SOURCE + GLOB, { force: true }), buildSource(true, false, devDist), plog('sources done.')));
-	gulp.watch([SOURCE + GLOB, CSS + GLOB, 'module.json', 'package.json'], gulp.series(reloadPackage, buildManifest(devDist), plog('manifest done.')));
+	gulp.watch([CSS + GLOB, 'module.json', 'package.json'], gulp.series(reloadPackage, buildManifest(devDist), plog('manifest done.')));
 	gulp.watch(LANG + GLOB, gulp.series(pdel(devDist + LANG + GLOB, { force: true }), outputLanguages(devDist), plog('langs done.')));
 	gulp.watch(TEMPLATES + GLOB, gulp.series(pdel(devDist + TEMPLATES + GLOB, { force: true }), outputTemplates(devDist), plog('templates done.')));
 	gulp.watch(CSS + GLOB, gulp.series(pdel(devDist + CSS + GLOB, { force: true }), outputStylesCSS(devDist), plog('css done.')));
