@@ -20,7 +20,7 @@ const CSS = 'css/';
 
 var PACKAGE = JSON.parse(fs.readFileSync('package.json'));
 function reloadPackage(cb) { PACKAGE = JSON.parse(fs.readFileSync('package.json')); cb(); }
-function DEV_DIST() { return PACKAGE.devDir + PACKAGE.name + '/'; }
+function DEV_DIST() { return path.join(PACKAGE.devDir, PACKAGE.name) + '/'; }
 
 String.prototype.replaceAll = function (pattern, replace) { return this.split(pattern).join(replace); }
 function pdel(patterns, options) { return () => { return del(patterns, options); }; }
