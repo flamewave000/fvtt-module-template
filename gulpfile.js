@@ -1,4 +1,5 @@
 const gulp = require('gulp');
+const path = require('path');
 var fs = require('fs')
 const del = require('del');
 const ts = require('gulp-typescript');
@@ -57,7 +58,7 @@ function buildManifest(output = null) {
 	return (cb) => gulp.src(PACKAGE.main) // collect the source files
 		.pipe(rename({ extname: '.js' })) // rename their extensions to `.js`
 		.pipe(gulp.src(CSS + GLOB)) // grab all the CSS files
-		.on('data', file => files.push(file.path.replace(file.base, file.base.replace(file.cwd + '/', '')))) // Collect all the file paths
+		.on('data', file => files.push(path.relative(file.cwd, file.path))) // Collect all the file paths
 		.on('end', () => { // output the filepaths to the module.json
 			if (files.length == 0)
 				throw Error('No files found in ' + SOURCE + GLOB + " or " + CSS + GLOB);
